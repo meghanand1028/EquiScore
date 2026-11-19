@@ -1,0 +1,174 @@
+---
+import '../styles/global.css';
+import { ChatWidget } from '../components/ChatWidget';
+
+interface Props {
+  title?: string;
+  activeNav?: string;
+  applicantName?: string;
+  businessName?: string;
+  statusBadge?: string;
+}
+
+const {
+  title = "Applicant Analytics Dashboard",
+  activeNav = "dashboard",
+  applicantName = "Ramesh Kumar",
+  businessName = "Shree Balaji Chai Stall",
+  statusBadge = "ELIGIBLE"
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} — EquiScore</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body class="bg-black text-white min-h-screen antialiased flex overflow-x-hidden selection:bg-white selection:text-black">
+    <!-- Monochrome Sidebar -->
+    <aside class="w-64 bg-[#0A0A0A] border-r border-[#222222] flex flex-col justify-between shrink-0 min-h-screen p-4 hidden md:flex sticky top-0 h-screen">
+      <div>
+        <!-- Brand -->
+        <a href="/" class="flex items-center gap-2.5 px-2 mb-6 group">
+          <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center font-bold text-black text-sm shadow-white-glow">✦</div>
+          <span class="text-lg font-bold tracking-tight text-white">Equi<span class="text-neutral-400">Score</span></span>
+        </a>
+
+        <!-- Action Button -->
+        <a href="/upload" class="btn-white w-full text-xs py-2.5 mb-6 flex items-center justify-center gap-1.5 shadow-white-glow">
+          <span>+</span> Upload Statement
+        </a>
+
+        <!-- Navigation Links -->
+        <nav class="space-y-1 text-xs font-medium">
+          <a
+            href="/upload"
+            class={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+              activeNav === 'upload'
+                ? 'bg-[#181818] text-white border border-[#333333] font-semibold'
+                : 'text-neutral-400 hover:text-white hover:bg-[#121212]'
+            }`}
+          >
+            <span class="text-sm">⬆</span> Upload Statement
+          </a>
+
+          <a
+            href="/dashboard"
+            class={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+              activeNav === 'dashboard'
+                ? 'bg-[#181818] text-white border border-[#333333] font-semibold'
+                : 'text-neutral-400 hover:text-white hover:bg-[#121212]'
+            }`}
+          >
+            <span class="text-sm">▣</span> Dashboard & Synthesis
+          </a>
+
+
+          <a
+            href="/simulator"
+            class={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+              activeNav === 'simulator'
+                ? 'bg-[#181818] text-white border border-[#333333] font-semibold'
+                : 'text-neutral-400 hover:text-white hover:bg-[#121212]'
+            }`}
+          >
+            <span class="text-sm">◒</span> What-If Simulator
+          </a>
+
+          <a
+            href="/fairness"
+            class={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+              activeNav === 'fairness'
+                ? 'bg-[#181818] text-white border border-[#333333] font-semibold'
+                : 'text-neutral-400 hover:text-white hover:bg-[#121212]'
+            }`}
+          >
+            <span class="text-sm">◈</span> Fairness & Bias Audit
+          </a>
+
+          <a
+            href="/passport"
+            class={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+              activeNav === 'passport'
+                ? 'bg-[#181818] text-white border border-[#333333] font-semibold'
+                : 'text-neutral-400 hover:text-white hover:bg-[#121212]'
+            }`}
+          >
+            <span class="text-sm">▤</span> Digital Passport (PDF)
+          </a>
+
+          <a
+            href="/local-vendor-connect"
+            class={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+              activeNav === 'local-vendor-connect'
+                ? 'bg-[#181818] text-white border border-[#333333] font-semibold'
+                : 'text-neutral-400 hover:text-white hover:bg-[#121212]'
+            }`}
+          >
+            <span class="text-sm">⚡</span> Local Vendor Connect
+          </a>
+        </nav>
+      </div>
+
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <!-- Topbar Header -->
+      <header class="h-16 bg-black/85 backdrop-blur-md border-b border-[#222222] px-6 flex items-center justify-between sticky top-0 z-40">
+        <div class="flex items-center gap-4">
+          <a href="/" class="md:hidden text-lg font-bold text-white">✦</a>
+          <h1 class="text-base font-bold text-white truncate">{title}</h1>
+          <span class="hidden sm:inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/10 text-white border border-white/20 font-mono">
+            {statusBadge}
+          </span>
+        </div>
+
+        <!-- Top Right Actions -->
+        <div class="flex items-center gap-3">
+
+
+          <a href="/passport" class="btn-white text-xs py-1.5 px-3.5 shadow-sm">
+            <span>▤</span> View Passport Dossier
+          </a>
+        </div>
+      </header>
+
+      <script is:inline>
+        function updateSidebarUser(data) {
+          if (!data) return;
+          const nameEl = document.getElementById('sidebar-user-name');
+          const bizEl = document.getElementById('sidebar-user-biz');
+          const avEl = document.getElementById('sidebar-user-avatar');
+          if (nameEl && data.applicant_name) nameEl.textContent = data.applicant_name;
+          if (bizEl && data.business_name) bizEl.textContent = data.business_name;
+          if (avEl && data.applicant_name) avEl.textContent = data.applicant_name.charAt(0);
+        }
+
+        try {
+          const cached = localStorage.getItem('equiscore_current_assessment');
+          if (cached) {
+            updateSidebarUser(JSON.parse(cached));
+          }
+        } catch (e) {}
+
+        window.addEventListener('equiscore_assessment_updated', (e) => {
+          if (e && e.detail) {
+            updateSidebarUser(e.detail);
+          }
+        });
+      </script>
+
+      <!-- Page Content -->
+      <main class="flex-1 p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-8">
+        <slot />
+      </main>
+    </div>
+    <ChatWidget client:load />
+  </body>
+</html>
